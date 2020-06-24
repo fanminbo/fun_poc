@@ -1,0 +1,52 @@
+# Input file for setup_volumes.py - ND
+# [some-name]
+# fcip = FC IP Address
+# fcport = FC Port # (currently 50220)
+# hport = Port # the host connects to (currently 4420)
+# fs_nodeid = The node-id of the FS, currently it is the MAC Address
+# compression_effort = compression_effort value (0-8)
+# encryption_key = key you provide for encrypting a volume
+# servers = server names that you're going to attach
+# server_ips = server ip addresses that you're going to attach. give in same order as name
+# username = username for server to do ssh
+# nvols = number of volumes; will be (nvols - start_vol_num) when start_vol_num > 0
+# start_vol_num = vol000<N>; leave this at 0. Usually for debugging after creating some volumes
+# voltypes = give all the types of volumes to create (raw rawenc dur durcomp durenc durcompenc)
+# volsize=1073741824
+# raw_volsize = volume size for raw volume
+# rawenc_volsize = volume size for rawenc volume
+# dur_volsize = volume size for dur volume
+# durcomp_volsize = volume size for durcomp volume
+# durenc_volsize = volume size for durenc volume
+# durcompenc_volsize = volume size for durcompenc volume
+# attach_mode = cyclic if you want to cycle thru hosts
+# attach_mode = all if you want all volumes attach to all hosts
+
+[fs136]
+fcip = 10.80.112.118
+fcport = 50220
+hport = 4420
+fs_nodeid = c8:2c:2b:00:3f:00 c8:2c:2b:00:3f:60 c8:2c:2b:00:3f:c0
+fs_dpu_name = FS202 FS203 FS204
+compression_effort = 2
+encryption_key = 'thisissecretkey123thisissecretkey123thisissecretkey1234567890123'
+servers = 10.80.112.101 10.80.112.102 10.80.112.103 10.80.112.104 10.80.112.105 10.80.112.1067
+server_ips = 10.80.112.101 10.80.112.102 10.80.112.103 10.80.112.104 10.80.112.105 10.80.112.107
+#servers = 10.80.112.103 10.80.112.104
+#server_ips = 10.80.112.103 10.80.112.104
+username = localadmin
+nvols = 12
+start_vol_num = 0
+voltypes = dur
+#voltypes = raw rawenc dur durcomp durenc durcompenc
+#voltypes = durenc 
+raw_volsize = 1073741824
+rawenc_volsize = 1073741824
+dur_volsize = 10737418240
+durcomp_volsize = 6442450944
+durenc_volsize = 8589934592
+durcompenc_volsize = 12884901888
+attach_mode = cyclic
+create_retries = 3
+attach_retries = 3
+#attach_mode = all
