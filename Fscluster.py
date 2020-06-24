@@ -45,6 +45,9 @@ class Fscluster:
             self.dpu_name[dpu1_id]=dname+"-1"
         self.set_drives_info()
 
+    def set_sshuser(self,user):
+        self.ssh_user=user
+
     def set_fcip(self,ip):
         self.fcip=ip
 

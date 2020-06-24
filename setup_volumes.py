@@ -85,6 +85,7 @@ if __name__ == "__main__":
     attach_retries = int(si['attach_retries'])
 
     fs1600=Fscluster(fcip,fcport,hport,fs_nodeids,fs_dpu_names)
+    fs1600.set_sshuser(username)
     fs1600.set_verbose(verbose)
 
     if args.show_drives:
