@@ -184,33 +184,38 @@ if __name__ == "__main__":
 
             if not args.no_attach:
                 if attach_mode == 'cyclic':
-                    servers=get_server(i%len(server_list))
-                else:
-                    servers=server_list
-
-                vol_dpu=fs1600.get_vol_dpu(volid)
-                # attach_done = 0 and i = 0
-                while attach_done == 0 and host_index < len(host_list):
-                    host=host_list[host_index]
-                    if vol_dpu not in attached_dpu[host]:
-                        rr=fs1600.attach_vol_to_host(volid,host)
-                        pid=rr['data']['uuid']
-                        fs1600.print_nvme_attach_cmd(volid,pid,host)
-                        attached_dpu[host].append(vol_dpu)
-                        attach_done=1
-                        attached_vols+=1
-                        nv=len(attached_dpu[host])
-                        if nv == num_dpu or nv == vol_per_host:
-                            attached_dpu[host]=[]
-                            host_list.pop(host_index)
+                    vol_dpu=fs1600.get_vol_dpu(volid)
+                    # attach_done = 0 and i = 0
+                    while attach_done == 0 and host_index < len(host_list):
+                        host=host_list[host_index]
+                        if vol_dpu not in attached_dpu[host]:
+                            rr=fs1600.attach_vol_to_host(volid,host)
+                            pid=rr['data']['uuid']
+                            fs1600.print_nvme_attach_cmd(volid,pid,host)
+                            attached_dpu[host].append(vol_dpu)
+                            attach_done=1
+                            attached_vols+=1
+                            nv=len(attached_dpu[host])
+                            if nv == num_dpu or nv == vol_per_host:
+                                attached_dpu[host]=[]
+                                host_list.pop(host_index)
+                            else:
+                                host_list.append(host_list.pop(host_index))
                         else:
-                            host_list.append(host_list.pop(host_index))
-                    else:
-                        host_index+=1
+                            host_index+=1
                 
-                if len(host_list) == 0:
-                    host_list=srvrips.split()
-                    vol_per_host=vol_per_host-num_dpu
+                    if len(host_list) == 0:
+                        host_list=srvrips.split()
+                        vol_per_host=vol_per_host-num_dpu
+                
+                if attach_mode == 'all':
+                    servers=server_list
+                    for server in servers:
+                        sip = servers[server]
+                        rr=fs1600.attach_vol_to_host(volid,sip)
+                        pid=rr['data']['uuid']
+                        fs1600.print_nvme_attach_cmd(volid,pid,server)
+                    attached_vols+=1
             i+=1
 
     tse=datetime.datetime.now()
